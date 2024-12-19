@@ -114,7 +114,7 @@ const getWeatherData = async ()=>{
 
 async function generateWeatherCards() {
     const API_KEY = "142f577c492000d03f02c48c16fb6814";
-    const cities = ["Rome", "New Delhi", "Paris"];
+    const cities = ["Maseru", "Pretoria", "Gaborone"];
     const weatherContainer = document.getElementById("weather-container");
 
     const fetchWeatherData = async (city) => {
