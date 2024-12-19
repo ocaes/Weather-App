@@ -50,7 +50,7 @@ const errormsg = document.getElementById("error")
 
 
 const errorMsg = document.getElementById('error');
-const API_KEY = "142f577c492000d03f02c48c16fb6814";  
+const API_KEY = "09f72f2156a59bda280ac79e0d7cc246";  
 searchButton.addEventListener('click', () => {
     getWeatherData();
     searchInput.value = '';
