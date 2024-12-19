@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+       
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+img{
+    width:2rem;
+}
+.name{
+    display: flex;
+   align-items: center;
+   height:2rem;
+}
+        body.light-mode {
+            background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        body.dark-mode {
+            background: linear-gradient(180deg, #1a237e 0%, #0d47a1 100%);
+        }
+
+        .container {
+            border-radius: 30px;
+            padding: 24px;
+            width: 100%;
+            max-width:400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .container {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .dark-mode .container {
+            background-color: rgba(18, 18, 18, 0.8);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .light-mode .header h1 {
+            color: #1e3d5c;
+        }
+
+        .dark-mode .header h1 {
+            color: #e3f2fd;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .search-box {
+            border-radius: 15px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .light-mode .search-box {
+            background: #f5f7fa;
+        }
+
+        .dark-mode .search-box {
+            background: #263238;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 16px;
+            padding-left: 8px;
+        }
+
+        .light-mode .search-box input {
+            color: #1e3d5c;
+        }
+
+        .dark-mode .search-box input {
+            color: #e3f2fd;
+        }
+
+        .search-box input::placeholder {
+            color: #90a4ae;
+        }
+
+        .weather-card {
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .light-mode .weather-card {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .weather-card {
+            background: #263238;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+        }
+
+        .temperature {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .light-mode .temperature {
+            color: #1e3d5c;
+        }
+
+        .dark-mode .temperature {
+            color: #e3f2fd;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .location {
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .light-mode .location {
+            color: #1e3d5c;
+        }
+
+        .dark-mode .location {
+            color: #e3f2fd;
+        }
+
+        .temp-range {
+            font-size: 16px;
+        }
+
+        .light-mode .temp-range {
+            color: #90a4ae;
+        }
+
+        .dark-mode .temp-range {
+            color: #b0bec5;
+        }
+
+        .weather-condition {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .light-mode .weather-condition {
+            color: #64b5f6;
+        }
+
+        .dark-mode .weather-condition {
+            color: #4fc3f7;
+        }
+
+        .search-icon, .weather-icon {
+            font-size: 20px;
+        }
+
+        .light-mode .search-icon {
+            color: #90a4ae;
+        }
+
+        .dark-mode .search-icon {
+            color: #b0bec5;
+        }
+      
+/* HTML: <div class="loader"></div> */
+.white-space{
+    width:100%;
+    min-height:100vh;
+    background-color: rgb(9, 9, 9);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index:88;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loader {
+  width: 40px;
+  position: absolute;
+  top: 50%;
+  
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  aspect-ratio: 1;
+   --c: linear-gradient(#dedbdb 0 0);
+   --m: radial-gradient(farthest-side,#f1e6e6 92%,#0000);
+  background: 
+    var(--c),var(--m),
+    var(--c),var(--m), 
+    var(--c),var(--m);
+  background-size: 8px 12px,8px 8px;
+  background-repeat: no-repeat;
+  animation: l16 1s infinite linear alternate;
+}
+@keyframes l16 {
+  0%,5%   {background-position: 0 50%             ,0 0               ,50% 50%             ,50% 0               ,100% 50%             ,100% 0}
+  16.67%  {background-position: 0 50%             ,0 calc(50% - 10px),50% 50%             ,50% 0               ,100% 50%             ,100% 0}
+  33.33%  {background-position: 0 calc(50% + 10px),0 50%             ,50% 50%             ,50% 0               ,100% 50%             ,100% 0}
+  50%     {background-position: 0 calc(50% + 10px),0 50%             ,50% 50%             ,50% calc(50% - 10px),100% 50%             ,100% 0}
+  66.67%  {background-position: 0 calc(50% + 10px),0 50%             ,50% calc(50% + 10px),50% 50%             ,100% 50%             ,100% 0}
+  83.33%  {background-position: 0 calc(50% + 10px),0 50%             ,50% calc(50% + 10px),50% 50%             ,100% 50%             ,100% calc(50% - 10px)}
+  95%,100%{background-position: 0 calc(50% + 10px),0 50%             ,50% calc(50% + 10px),50% 50%             ,100% calc(50% + 10px),100% 50%}
+}
+        @media (max-width: 600px) {
+            .container{
+        width:100vw;
+        border-radius: 0;
+        min-height: 100vh;
+        margin: 0;
+            }
+            body{
+               padding: 0;
+        margin: 0;
+            }
+        }
+
+        #error{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 999;
+        }
+        .hidden{
+            display: none;
+        }
+        .search-icon i{
+            padding:0.8rem;
+            border-radius:50%;
+            margin:1px;
+            background-color: #1ea9ef;
+            color:#fff;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="loader"></div>
+    <div class="white-space"></div>
+    <div class="container">
+        <div class="header">
+            <h1>Around Your Country</h1>
+            <button class="theme-toggle" id="themeToggle">🌜</button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for a city">
+            <span class="search-icon" id="searchButton"><i class='bx bx-search-alt-2'></i></span>
+        </div>
+        <div id="weather-container">
+        
+            </div>
+        </div>
+        </div>
+
+
+   
+
+        <p id="error" class="hidden">CITY NAME  NOT FOUND</p>
+<!-- 
+        <div class="weather-card">
+            <div class="temperature">42°</div>
+            <div class="weather-info">
+                <div>
+                    <div class="location">Milan, Italy</div>
+                    <div class="weather-condition">Mostly Sunny</div>
+                </div>
+                <div>
+                    <span class="temp-range">20° - 29°</span>
+                    <span class="weather-icon">☀️</span>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div class="weather-card">
+            <div class="temperature">32°</div>
+            <div class="weather-info">
+                <div>
+                    <div class="location">Venice, Italy</div>
+                    <div class="weather-condition">Cloudy</div>
+                </div>
+                <div>
+                    <span class="temp-range">18° - 25°</span>
+                    <span class="weather-icon">☁️</span>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="script.js"></script>
+</body>
+</html>
